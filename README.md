@@ -18,17 +18,54 @@ The project includes Dhall functions and a tool to create the configurations.
 
 ## Example
 
+Using the command line:
+
+```yaml
+# ./examples/demo.yaml
+name: local
+connections:
+  gerrit: ["local"]
+```
+
+```bash
+$ bootstrap-your-zuul ./examples/demo.yaml
+* /etc/zuul/main.yaml
+- tenant:
+    name: local
+
+* config/zuul.d/pipelines.yaml
+- pipeline:
+    name: check
+    manager: independent
+    success:
+      local:
+        Verified: 1
+```
+
+Or using the dhall function directly:
+
 ```dhall
 -- ./examples/demo.dhall
 let BootstrapYourZuul = ../package.dhall
 
-in  BootstrapYourZuul.Config::{ name = "local" }
+in  BootstrapYourZuul.Config::{
+    , name = "local"
+    , connections = [ BootstrapYourZuul.Connection.gerrit "local" ]
+    }
 
 ```
 
 ```yaml
 # dhall-to-yaml <<< '(./package.dhall).render ./examples/demo.dhall'
+pipelines:
+  - pipeline:
+      manager: independent
+      name: check
+      success:
+        local:
+          Verified: 1
 tenant:
-  name: local
+  - tenant:
+      name: local
 
 ```
