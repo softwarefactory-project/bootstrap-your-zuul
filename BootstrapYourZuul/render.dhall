@@ -36,6 +36,8 @@ in  \(config : ./Config/Type.dhall) ->
                 Zuul.Pipeline.Type
                 Zuul.Pipeline.Type
                 (addSqlReporter config.sql)
-                [ Pipeline.check config.connections ]
+                [ Pipeline.check config.connections
+                , Pipeline.gate config.connections
+                ]
             )
       }

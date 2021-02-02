@@ -36,10 +36,25 @@ $ bootstrap-your-zuul ./examples/demo.yaml
 * config/zuul.d/pipelines.yaml
 - pipeline:
     name: check
+    failure:
+      sqlreporter: []
     manager: independent
     success:
       local:
         Verified: 1
+      sqlreporter: []
+
+- pipeline:
+    name: gate
+    failure:
+      sqlreporter: []
+    manager: dependent
+    precedence: high
+    success:
+      local:
+        Verified: 2
+        submit: true
+      sqlreporter: []
 ```
 
 Or using the dhall function directly:
@@ -67,6 +82,17 @@ pipelines:
       success:
         local:
           Verified: 1
+        sqlreporter: []
+  - pipeline:
+      failure:
+        sqlreporter: []
+      manager: dependent
+      name: gate
+      precedence: high
+      success:
+        local:
+          Verified: 2
+          submit: true
         sqlreporter: []
 tenant:
   - tenant:

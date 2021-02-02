@@ -1,1 +1,1 @@
-{ check = ./check.dhall }
+{ check = ./check.dhall, gate = ./gate.dhall }
