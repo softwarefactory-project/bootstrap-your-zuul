@@ -50,6 +50,7 @@ let BootstrapYourZuul = ../package.dhall
 
 in  BootstrapYourZuul.Config::{
     , name = "local"
+    , sql = "sqlreporter"
     , connections = [ BootstrapYourZuul.Connection.gerrit "local" ]
     }
 
@@ -59,11 +60,14 @@ in  BootstrapYourZuul.Config::{
 # dhall-to-yaml <<< '(./package.dhall).render ./examples/demo.dhall'
 pipelines:
   - pipeline:
+      failure:
+        sqlreporter: []
       manager: independent
       name: check
       success:
         local:
           Verified: 1
+        sqlreporter: []
 tenant:
   - tenant:
       name: local

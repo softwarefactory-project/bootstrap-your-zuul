@@ -1,3 +1,4 @@
 name: local
+sql: "sqlreporter"
 connections:
   gerrit: ["local"]
