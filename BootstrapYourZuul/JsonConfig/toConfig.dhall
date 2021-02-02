@@ -36,6 +36,7 @@ let toConfig
     = \(jsonConfig : JsonConfig.Type) ->
         Config::{
         , name = jsonConfig.name
+        , sql = jsonConfig.sql
         , connections =
               cmap Connection.gerrit jsonConfig.connections.gerrit
             # cmap Connection.pagure jsonConfig.connections.pagure
