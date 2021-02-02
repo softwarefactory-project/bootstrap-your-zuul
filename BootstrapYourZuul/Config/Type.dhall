@@ -1,1 +1,5 @@
-{ name : Text, sql : Text, connections : List ../Connection/Type.dhall }
+{ name : Text
+, sql : Text
+, zuul-jobs : Optional Text
+, connections : List ../Connection/Type.dhall
+}

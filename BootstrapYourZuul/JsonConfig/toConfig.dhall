@@ -37,6 +37,7 @@ let toConfig
         Config::{
         , name = jsonConfig.name
         , sql = jsonConfig.sql
+        , zuul-jobs = jsonConfig.zuul-jobs
         , connections =
               cmap Connection.gerrit jsonConfig.connections.gerrit
             # cmap Connection.pagure jsonConfig.connections.pagure

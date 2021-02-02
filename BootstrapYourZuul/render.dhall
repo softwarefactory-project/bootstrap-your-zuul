@@ -4,6 +4,10 @@ let Zuul = (../imports.dhall).Zuul
 
 let Pipeline = ./Pipeline/package.dhall
 
+let Job = ./Job/package.dhall
+
+let Config = ./Config/package.dhall
+
 let addSqlReporter =
       \(reporter-name : Text) ->
       \(pipeline : Zuul.Pipeline.Type) ->
@@ -28,8 +32,9 @@ let addSqlReporter =
                 , failure = addReporter pipeline.failure
                 }
 
-in  \(config : ./Config/Type.dhall) ->
+in  \(config : Config.Type) ->
       { tenant = [ { tenant.name = config.name } ]
+      , jobs = Zuul.Job.wrap [ Job.base (Config.getZuulJobs config) ]
       , pipelines =
           Zuul.Pipeline.wrap
             ( Prelude.List.map

@@ -55,6 +55,20 @@ $ bootstrap-your-zuul ./examples/demo.yaml
         Verified: 2
         submit: true
       sqlreporter: []
+
+* config/zuul.d/jobs.yaml
+- job:
+    name: base
+    parent: null
+    description: The base job.
+    pre-run:
+    post-run:
+    extra-vars:
+      zuul_use_fetch_output: true
+    - playbooks/base/post.yaml
+    - playbooks/base/pre.yaml
+    roles:
+    - zuul: opendev.org/zuul/zuul-jobs
 ```
 
 Or using the dhall function directly:
@@ -73,6 +87,19 @@ in  BootstrapYourZuul.Config::{
 
 ```yaml
 # dhall-to-yaml <<< '(./package.dhall).render ./examples/demo.dhall'
+jobs:
+  - job:
+      description: The base job.
+      extra-vars:
+        zuul_use_fetch_output: true
+      name: base
+      parent: null
+      post-run:
+        - playbooks/base/post.yaml
+      pre-run:
+        - playbooks/base/pre.yaml
+      roles:
+        - zuul: opendev.org/zuul/zuul-jobs
 pipelines:
   - pipeline:
       failure:

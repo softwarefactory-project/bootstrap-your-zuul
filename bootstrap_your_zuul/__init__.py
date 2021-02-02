@@ -34,7 +34,7 @@ def json_to_dhall(type_: str, obj: Any) -> str:
 
 
 def dhall_to_json(expression: str) -> Any:
-    return json.loads(pread(["dhall-to-json"], expression))
+    return yaml.safe_load(pread(["dhall-to-yaml"], expression))
 
 
 def render(config_str: str) -> List[Tuple[Path, str]]:
@@ -54,6 +54,7 @@ def render(config_str: str) -> List[Tuple[Path, str]]:
             [
                 ("/etc/zuul/main.yaml", "tenant"),
                 ("config/zuul.d/pipelines.yaml", "pipelines"),
+                ("config/zuul.d/jobs.yaml", "jobs"),
             ],
         )
     )
