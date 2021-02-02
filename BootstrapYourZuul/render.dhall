@@ -6,6 +6,8 @@ let Pipeline = ./Pipeline/package.dhall
 
 let Job = ./Job/package.dhall
 
+let Playbook = ./Playbook.dhall
+
 let Config = ./Config/package.dhall
 
 let addSqlReporter =
@@ -45,4 +47,6 @@ in  \(config : Config.Type) ->
                 , Pipeline.gate config.connections
                 ]
             )
+      , playbook_pre = Playbook.pre
+      , playbook_post = Playbook.post
       }

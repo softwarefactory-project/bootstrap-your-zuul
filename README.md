@@ -69,6 +69,25 @@ $ bootstrap-your-zuul ./examples/demo.yaml
     - playbooks/base/pre.yaml
     roles:
     - zuul: opendev.org/zuul/zuul-jobs
+
+* playbooks/base/pre.yaml
+- hosts: localhost
+  tasks:
+  - import_role:
+      name: emit-job-header
+  - import_role:
+      name: log-inventory
+
+- hosts: all
+  tasks:
+  - include_role:
+      name: validate-host
+
+* playbooks/base/post.yaml
+- hosts: all
+  tasks:
+  - include_role:
+      name: fetch-output
 ```
 
 Or using the dhall function directly:
@@ -121,6 +140,22 @@ pipelines:
           Verified: 2
           submit: true
         sqlreporter: []
+playbook_post:
+  - hosts: all
+    tasks:
+      - include_role:
+          name: fetch-output
+playbook_pre:
+  - hosts: localhost
+    tasks:
+      - import_role:
+          name: emit-job-header
+      - import_role:
+          name: log-inventory
+  - hosts: all
+    tasks:
+      - include_role:
+          name: validate-host
 tenant:
   - tenant:
       name: local

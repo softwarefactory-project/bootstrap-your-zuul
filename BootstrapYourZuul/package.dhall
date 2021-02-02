@@ -1,4 +1,5 @@
-{ render = ./render.dhall
+{ Playbook = ./Playbook.dhall
+, render = ./render.dhall
 , Config = ./Config/package.dhall
 , Connection = ./Connection/package.dhall
 , Job = ./Job/package.dhall

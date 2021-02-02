@@ -55,6 +55,8 @@ def render(config_str: str) -> List[Tuple[Path, str]]:
                 ("/etc/zuul/main.yaml", "tenant"),
                 ("config/zuul.d/pipelines.yaml", "pipelines"),
                 ("config/zuul.d/jobs.yaml", "jobs"),
+                ("playbooks/base/pre.yaml", "playbook_pre"),
+                ("playbooks/base/post.yaml", "playbook_post"),
             ],
         )
     )
