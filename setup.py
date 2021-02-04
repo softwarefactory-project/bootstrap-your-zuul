@@ -21,6 +21,7 @@ setup(
     description="A Zuul configuration generator.",
     license="ASL v2.0",
     long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
     install_requires=["zuulfmt", "pyyaml"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",

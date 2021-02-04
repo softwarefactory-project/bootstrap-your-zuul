@@ -11,4 +11,6 @@
     post:
       jobs:
         - shake-factory-publish-docs
+    release:
+      jobs:
         - upload-pypi
