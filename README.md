@@ -140,6 +140,22 @@ pipelines:
           Verified: 2
           submit: true
         sqlreporter: []
+  - pipeline:
+      description: This pipeline runs jobs that operate after each change is merged.
+      failure:
+        sqlreporter: []
+      manager: supercedent
+      name: post
+      post-review: true
+      precedence: high
+      success:
+        sqlreporter: []
+      trigger:
+        local:
+          - event:
+              - ref-updated
+            ref:
+              - "^refs/heads/.*$"
 playbook_post:
   - hosts: all
     tasks:

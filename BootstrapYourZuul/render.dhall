@@ -45,6 +45,7 @@ in  \(config : Config.Type) ->
                 (addSqlReporter config.sql)
                 [ Pipeline.check config.connections
                 , Pipeline.gate config.connections
+                , Pipeline.post config.connections
                 ]
             )
       , playbook_pre = Playbook.pre
