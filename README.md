@@ -177,3 +177,22 @@ tenant:
       name: local
 
 ```
+
+Some pipeline are custom, for example to create a periodic trigger:
+
+```yaml
+# dhall-to-yaml <<< 'let BYZ = ./package.dhall in [{pipeline = BYZ.Pipeline.periodic BYZ.Pipeline.Frequency.daily BYZ.Zuul.Pipeline.Reporter.Smtp.default}]'
+
+- pipeline:
+    description: Jobs in this queue are triggered daily
+    failure:
+      smtp: {}
+    manager: independent
+    name: periodic-daily
+    post-review: true
+    precedence: low
+    trigger:
+      timer:
+        - time: "0 0 * * * *"
+
+```
