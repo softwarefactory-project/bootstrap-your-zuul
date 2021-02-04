@@ -156,6 +156,25 @@ pipelines:
               - ref-updated
             ref:
               - "^refs/heads/.*$"
+  - pipeline:
+      description: |
+        This pipeline runs jobs that operate after each change is merged
+        in order to promote artifacts generated in the gate
+        pipeline.
+      failure:
+        local: {}
+        sqlreporter: []
+      manager: supercedent
+      name: promote
+      post-review: true
+      precedence: high
+      success:
+        local: {}
+        sqlreporter: []
+      trigger:
+        local:
+          - event:
+              - change-merged
 playbook_post:
   - hosts: all
     tasks:

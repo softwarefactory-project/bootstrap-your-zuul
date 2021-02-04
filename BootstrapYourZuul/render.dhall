@@ -22,6 +22,7 @@ in  \(config : Config.Type) ->
                 [ Pipeline.check config.connections
                 , Pipeline.gate config.connections
                 , Pipeline.post config.connections
+                , Pipeline.promote config.connections
                 ]
             )
       , playbook_pre = Playbook.pre
