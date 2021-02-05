@@ -216,6 +216,24 @@ Some pipeline are custom, for example to create a periodic trigger:
 
 ```
 
+## Contribute
+
+### Web Interface
+
+Build the web interface:
+
+```ShellSession
+pnpm install
+pnpm start
+pnpm serve # in another term
+```
+
+Distribute the web interface:
+
+```ShellSession
+pnpm dist
+```
+
 ### Server
 
 Build the server:
