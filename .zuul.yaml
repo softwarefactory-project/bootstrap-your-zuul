@@ -3,6 +3,13 @@
       jobs:
         - shake-factory-test
         - shake-factory-docs
+        - pnpm-test:
+            required-projects:
+              - software-factory/res-remoteapi
+            files:
+              - package.json
+              - bsconfig.json
+              - src/.*
         - tox-linters:
             nodeset: python-latest-pod
         - tox-py36:
