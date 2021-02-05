@@ -215,3 +215,12 @@ Some pipeline are custom, for example to create a periodic trigger:
         - time: "0 0 * * * *"
 
 ```
+
+### Server
+
+Build the server:
+
+```ShellSession
+cabal build
+cabal run
+```
