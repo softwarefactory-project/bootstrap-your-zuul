@@ -213,5 +213,22 @@ Some pipeline are custom, for example to create a periodic trigger:
     trigger:
       timer:
         - time: "0 0 * * * *"
+```
 
+## Contribute
+
+### Web Interface
+
+Build the web interface:
+
+```ShellSession
+pnpm install
+pnpm start
+pnpm serve # in another term
+```
+
+Distribute the web interface:
+
+```ShellSession
+pnpm dist
 ```
