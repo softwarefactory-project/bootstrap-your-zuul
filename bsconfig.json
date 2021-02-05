@@ -1,0 +1,19 @@
+{
+  "name": "bootstrap-your-zuul",
+  "reason": {
+    "react-jsx": 3
+  },
+  "sources": ["src"],
+  "bsc-flags": ["-bs-super-errors", "-bs-no-version-header"],
+  "package-specs": [
+    {
+      "module": "commonjs",
+      "in-source": true
+    }
+  ],
+  "suffix": ".bs.js",
+  "bs-dependencies": ["reason-react", "remotedata-re", "bs-fetch", "decco"],
+  "bs-dev-dependencies": [],
+  "ppx-flags": ["decco/ppx"],
+  "refmt": 3
+}
