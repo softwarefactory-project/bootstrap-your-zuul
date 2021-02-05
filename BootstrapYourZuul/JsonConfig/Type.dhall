@@ -1,9 +1,5 @@
 { name : Text
 , sql : Text
-, zuul-jobs : Optional Text
-, connections :
-    { gerrit : Optional (List Text)
-    , pagure : Optional (List Text)
-    , github : Optional (List Text)
-    }
+, zuul_jobs : Optional Text
+, connections : ./Connections.dhall
 }
