@@ -122,24 +122,66 @@ jobs:
 pipelines:
   - pipeline:
       failure:
+        local:
+          Verified: -1
         sqlreporter: []
       manager: independent
       name: check
+      require:
+        local:
+          current-patchset: true
+          open: true
+      start:
+        local:
+          Verified: 0
       success:
         local:
           Verified: 1
         sqlreporter: []
+      trigger:
+        local:
+          - event:
+              - patchset-created
+          - event:
+              - change-restored
+          - comment:
+              - "(?i)^(Patch Set [0-9]+:)?( [\\w\\\\+-]*)*(\\n\\n)?\\s*(recheck|reverify)"
+            event:
+              - comment-added
   - pipeline:
       failure:
+        local:
+          Verified: -2
         sqlreporter: []
       manager: dependent
       name: gate
+      post-review: true
       precedence: high
+      require:
+        local:
+          approval:
+            Workflow: 1
+          current-patchset: true
+          open: true
+      start:
+        local:
+          Verified: 0
       success:
         local:
           Verified: 2
           submit: true
         sqlreporter: []
+      supercedes: check
+      trigger:
+        local:
+          - approval:
+              Workflow: 1
+            event:
+              - comment-added
+          - comment:
+              - "(?i)^(Patch Set [0-9]+:)?( [\\w\\\\+-]*)*(\\n\\n)?\\s*re(check|verify)"
+            event:
+              - comment-added
   - pipeline:
       description: This pipeline runs jobs that operate after each change is merged.
       failure:
