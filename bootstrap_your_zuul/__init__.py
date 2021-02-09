@@ -25,6 +25,11 @@ import json
 byz = "~/src/softwarefactory-project.io/software-factory/bootstrap-your-zuul/package.dhall"
 
 
+class IndentedListDumper(yaml.Dumper):
+    def increase_indent(self, flow=False, indentless=False):  # type: ignore
+        return super(IndentedListDumper, self).increase_indent(flow, False)  # type: ignore
+
+
 def pread(argv: List[str], stdin: str) -> str:
     proc = subprocess.Popen(argv, stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     stdout, _ = proc.communicate(stdin.encode("utf-8"))
@@ -39,6 +44,10 @@ def json_to_dhall(type_: str, obj: Any) -> str:
 
 def dhall_to_json(expression: str) -> Any:
     return yaml.safe_load(pread(["dhall-to-yaml"], expression))
+
+
+def yaml_dump(obj: Any) -> str:
+    return yaml.dump(obj, Dumper=IndentedListDumper, default_flow_style=False)  # type: ignore
 
 
 def write(filepath: Path, content: str) -> None:
@@ -61,7 +70,7 @@ def render(config_file: Path) -> List[Tuple[Path, str]]:
         map(
             lambda file_path_content: (
                 Path(file_path_content[0]),
-                zuulfmt.fmt("\n" + yaml.safe_dump(config[file_path_content[1]])),
+                zuulfmt.fmt("\n" + yaml_dump(config[file_path_content[1]])),
             ),
             [
                 ("/etc/zuul/main.yaml", "tenant"),
