@@ -21,6 +21,10 @@ import zuulfmt  # type: ignore
 import json
 
 
+# TODO: use a released version here
+byz = "~/src/softwarefactory-project.io/software-factory/bootstrap-your-zuul/package.dhall"
+
+
 def pread(argv: List[str], stdin: str) -> str:
     proc = subprocess.Popen(argv, stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     stdout, _ = proc.communicate(stdin.encode("utf-8"))
@@ -37,14 +41,14 @@ def dhall_to_json(expression: str) -> Any:
     return yaml.safe_load(pread(["dhall-to-yaml"], expression))
 
 
-def render(config_str: str) -> List[Tuple[Path, str]]:
-    dhall_config = json_to_dhall(
-        "(./package.dhall).JsonConfig.Type", yaml.safe_load(config_str)
-    )
-    config = dhall_to_json(
-        "let ZYB = ./package.dhall in ZYB.render (ZYB.JsonConfig.toConfig %s)"
-        % dhall_config
-    )
+def render(config_file: Path) -> List[Tuple[Path, str]]:
+    if config_file.suffix == ".dhall":
+        dhall_config = str(config_file.resolve())
+    else:
+        dhall_config = "(BYZ.JsonConfig.toConfig %s)" % json_to_dhall(
+            "(%s).JsonConfig.Type" % byz, yaml.safe_load(config_file.read_text())
+        )
+    config = dhall_to_json("let BYZ = %s in BYZ.render %s" % (byz, dhall_config))
     return list(
         map(
             lambda file_path_content: (
@@ -70,7 +74,7 @@ def usage() -> argparse.Namespace:
 
 def main() -> None:
     args = usage()
-    for k, v in render(open(args.config).read()):
+    for k, v in render(Path(args.config)):
         print("* " + str(k))
         print(v.strip())
         print()
