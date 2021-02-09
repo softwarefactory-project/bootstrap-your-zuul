@@ -41,6 +41,14 @@ def dhall_to_json(expression: str) -> Any:
     return yaml.safe_load(pread(["dhall-to-yaml"], expression))
 
 
+def write(filepath: Path, content: str) -> None:
+    previous = filepath.read_text() if filepath.exists() else ""
+    if previous != content:
+        filepath.parent.mkdir(parents=True, exist_ok=True)
+        filepath.write_text(content)
+        print("* " + str(filepath) + ": updated!")
+
+
 def render(config_file: Path) -> List[Tuple[Path, str]]:
     if config_file.suffix == ".dhall":
         dhall_config = str(config_file.resolve())
@@ -57,8 +65,8 @@ def render(config_file: Path) -> List[Tuple[Path, str]]:
             ),
             [
                 ("/etc/zuul/main.yaml", "tenant"),
-                ("config/zuul.d/pipelines.yaml", "pipelines"),
-                ("config/zuul.d/jobs.yaml", "jobs"),
+                ("zuul.d/pipelines.yaml", "pipelines"),
+                ("zuul.d/jobs.yaml", "jobs"),
                 ("playbooks/base/pre.yaml", "playbook_pre"),
                 ("playbooks/base/post.yaml", "playbook_post"),
             ],
@@ -69,15 +77,19 @@ def render(config_file: Path) -> List[Tuple[Path, str]]:
 def usage() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Zuul configuration generator")
     parser.add_argument("config", help="Tenant BYZ configuration file")
+    parser.add_argument("--write", metavar="DIR", help="Write configuration")
     return parser.parse_args()
 
 
 def main() -> None:
     args = usage()
     for k, v in render(Path(args.config)):
-        print("* " + str(k))
-        print(v.strip())
-        print()
+        if args.write and not k.is_absolute():
+            write(args.write / k, v)
+        else:
+            print("* " + str(k))
+            print(v.strip())
+            print()
 
 
 if __name__ == "__main__":
