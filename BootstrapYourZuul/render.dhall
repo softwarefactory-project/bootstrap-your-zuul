@@ -14,17 +14,26 @@ in  \(config : Config.Type) ->
       { tenant = [ { tenant.name = config.name } ]
       , jobs = Zuul.Job.wrap [ Job.base (Config.getZuulJobs config) ]
       , pipelines =
-          Zuul.Pipeline.wrap
-            ( Prelude.List.map
-                Zuul.Pipeline.Type
-                Zuul.Pipeline.Type
-                (Pipeline.addSqlReporter config.sql)
-                [ Pipeline.check config.connections
-                , Pipeline.gate config.connections
-                , Pipeline.post config.connections
-                , Pipeline.promote config.connections
-                ]
-            )
+          let maybeAddReporter =
+                merge
+                  { None = \(xs : List Zuul.Pipeline.Type) -> xs
+                  , Some =
+                      \(sql : Text) ->
+                        Prelude.List.map
+                          Zuul.Pipeline.Type
+                          Zuul.Pipeline.Type
+                          (Pipeline.addSqlReporter sql)
+                  }
+                  config.sql
+
+          in  Zuul.Pipeline.wrap
+                ( maybeAddReporter
+                    [ Pipeline.check config.connections
+                    , Pipeline.gate config.connections
+                    , Pipeline.post config.connections
+                    , Pipeline.promote config.connections
+                    ]
+                )
       , playbook_pre = Playbook.pre
       , playbook_post = Playbook.post
       }
