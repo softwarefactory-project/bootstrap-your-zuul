@@ -98,6 +98,7 @@ let BootstrapYourZuul = ../package.dhall
 
 in  BootstrapYourZuul.Config::{
     , name = "local"
+    , label = Some "centos-7"
     , sql = Some "sqlreporter"
     , connections = [ BootstrapYourZuul.Connection.gerrit "local" ]
     }
@@ -112,6 +113,10 @@ jobs:
       extra-vars:
         zuul_use_fetch_output: true
       name: base
+      nodeset:
+        nodes:
+          - label: centos-7
+            name: worker
       parent: null
       post-run:
         - playbooks/base/post.yaml
@@ -119,6 +124,9 @@ jobs:
         - playbooks/base/pre.yaml
       roles:
         - zuul: opendev.org/zuul/zuul-jobs
+      secrets:
+        - site_sflogs
+      timeout: 3600
 pipelines:
   - pipeline:
       failure:

@@ -36,6 +36,7 @@ let toConfig
     = \(jsonConfig : JsonConfig.Type) ->
         Config::{
         , name = jsonConfig.name
+        , label = jsonConfig.label
         , sql = jsonConfig.sql
         , zuul-jobs = jsonConfig.zuul_jobs
         , connections =

@@ -1,7 +1,9 @@
 - project:
     check: &ci
       jobs:
-        - shake-factory-test
+        - shake-factory-test:
+            required-projects:
+              - software-factory/dhall-zuul
         - shake-factory-docs
         - tox-linters:
             nodeset: python-latest-pod
