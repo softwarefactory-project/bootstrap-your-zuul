@@ -119,6 +119,9 @@ jobs:
         - playbooks/base/pre.yaml
       roles:
         - zuul: opendev.org/zuul/zuul-jobs
+      secrets:
+        - site_sflogs
+      timeout: 3600
 pipelines:
   - pipeline:
       failure:
