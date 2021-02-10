@@ -11,14 +11,14 @@ let Playbook = ./Playbook.dhall
 let Config = ./Config/package.dhall
 
 let --| TODO: define log settings in the Config
-    log-secrets =
-      [ "site_sflogs" ]
+    log-secret =
+      "site_sflogs"
 
 in  \(config : Config.Type) ->
       { tenant = [ { tenant.name = config.name } ]
       , jobs =
           Zuul.Job.wrap
-            [ Job.base config.label (Config.getZuulJobs config) log-secrets ]
+            [ Job.base config.label (Config.getZuulJobs config) [ log-secret ] ]
       , pipelines =
           let maybeAddReporter =
                 merge
@@ -41,5 +41,5 @@ in  \(config : Config.Type) ->
                     ]
                 )
       , playbook_pre = Playbook.pre
-      , playbook_post = Playbook.post
+      , playbook_post = Playbook.post log-secret
       }
