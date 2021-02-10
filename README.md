@@ -226,21 +226,39 @@ pipelines:
           - event:
               - change-merged
 playbook_post:
-  - hosts: all
-    tasks:
-      - include_role:
-          name: fetch-output
+  - hosts: localhost
+    roles:
+      - add-fileserver
+    vars:
+      fileserver: "{{ site_sflogs }}"
+  - hosts: "{{ site_sflogs.fqdn }}"
+    roles:
+      - upload-logs
+    vars:
+      zuul_log_compress: true
+      zuul_log_url: "{{ site_sflogs.url }}"
+      zuul_logserver_root: "{{ site_sflogs.path }}"
 playbook_pre:
   - hosts: localhost
-    tasks:
-      - import_role:
-          name: emit-job-header
-      - import_role:
-          name: log-inventory
+    roles:
+      - log-inventory
+      - emit-job-header
   - hosts: all
     tasks:
       - include_role:
           name: validate-host
+      - block:
+          - include_role:
+              name: validate-host
+          - include_role:
+              name: prepare-workspace
+        when: "ansible_connection != 'kubectl'"
+      - block:
+          - include_role:
+              name: prepare-workspace-openshift
+          - include_role:
+              name: remove-zuul-sshkey
+        when: "ansible_connection == 'kubectl'"
 tenant:
   - tenant:
       name: local
