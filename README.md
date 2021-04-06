@@ -99,7 +99,6 @@ let BootstrapYourZuul = ../package.dhall
 in  BootstrapYourZuul.Config::{
     , name = "local"
     , label = Some "centos-7"
-    , sql = Some "sqlreporter"
     , connections = [ BootstrapYourZuul.Connection.gerrit "local" ]
     }
 
@@ -132,7 +131,6 @@ pipelines:
       failure:
         local:
           Verified: -1
-        sqlreporter: []
       manager: independent
       name: check
       require:
@@ -145,7 +143,6 @@ pipelines:
       success:
         local:
           Verified: 1
-        sqlreporter: []
       trigger:
         local:
           - event:
@@ -160,7 +157,6 @@ pipelines:
       failure:
         local:
           Verified: -2
-        sqlreporter: []
       manager: dependent
       name: gate
       post-review: true
@@ -178,7 +174,6 @@ pipelines:
         local:
           Verified: 2
           submit: true
-        sqlreporter: []
       supercedes: check
       trigger:
         local:
@@ -192,14 +187,10 @@ pipelines:
               - comment-added
   - pipeline:
       description: This pipeline runs jobs that operate after each change is merged.
-      failure:
-        sqlreporter: []
       manager: supercedent
       name: post
       post-review: true
       precedence: high
-      success:
-        sqlreporter: []
       trigger:
         local:
           - event:
@@ -213,14 +204,12 @@ pipelines:
         pipeline.
       failure:
         local: {}
-        sqlreporter: []
       manager: supercedent
       name: promote
       post-review: true
       precedence: high
       success:
         local: {}
-        sqlreporter: []
       trigger:
         local:
           - event:

@@ -37,7 +37,6 @@ let toConfig
         Config::{
         , name = jsonConfig.name
         , label = jsonConfig.label
-        , sql = jsonConfig.sql
         , zuul-jobs = jsonConfig.zuul_jobs
         , connections =
               cmap Connection.gerrit jsonConfig.connections.gerrit

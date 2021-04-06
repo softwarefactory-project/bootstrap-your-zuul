@@ -1,5 +1,4 @@
-{ addSqlReporter = ./addSqlReporter.dhall
-, check = ./check.dhall
+{ check = ./check.dhall
 , gate = ./gate.dhall
 , patchsetComment = ./patchsetComment.dhall
 , periodic = ./periodic.dhall
