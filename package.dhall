@@ -1,1 +1,1 @@
-./BootstrapYourZuul/package.dhall
+./BootstrapYourZuul/package.dhall sha256:bce8359b252694e9ab10518c571f02d7f1d3629c9079cad5456d6efbc8258607
